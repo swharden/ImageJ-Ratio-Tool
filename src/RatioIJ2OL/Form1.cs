@@ -16,6 +16,7 @@ public partial class Form1 : Form
 
         nudFramesPerIteration.ValueChanged += (s, e) => PopulateRatioData();
         nudSelectedRoi.ValueChanged += (s, e) => PopulateRatioData();
+        nudSweeps.ValueChanged += (s, e) => PopulateRatioData();
         btnSelectCsv.Click += (s, e) =>
         {
             OpenFileDialog ofd = new() { Filter = "CSV files (*.csv)|*.csv" };
@@ -68,9 +69,18 @@ public partial class Form1 : Form
         Application.DoEvents();
     }
 
+    private void UpdateAnalyzerToReflectGuiOptions()
+    {
+        if (IJCSV is null) return;
+
+        IJCSV.SweepCount = (int)nudSweeps.Value;
+    }
+
     private void PopulateRatioData()
     {
         if (IJCSV is null) return;
+
+        UpdateAnalyzerToReflectGuiOptions();
 
         int roiIndex = (int)nudSelectedRoi.Value - 1;
         int framesPerIteration = (int)nudFramesPerIteration.Value;
@@ -100,6 +110,29 @@ public partial class Form1 : Form
             dataTable.Rows.Add(dataRow);
         }
 
+        PlotRatioData();
         Application.DoEvents();
+    }
+
+    private void PlotRatioData()
+    {
+        if (IJCSV is null) return;
+
+        formsPlot1.Plot.Clear();
+
+        int roiIndex = (int)nudSelectedRoi.Value - 1;
+
+        for (int i = 0; i < IJCSV.SweepCount; i++)
+        {
+            double[] values = IJCSV.GetRatioSweep(roiIndex, i);
+            var sig = formsPlot1.Plot.Add.Signal(values);
+            sig.LineWidth = 2;
+            sig.Label = $"ROI {roiIndex + 1}";
+        }
+
+        formsPlot1.Plot.ShowLegend(ScottPlot.Alignment.UpperRight);
+        formsPlot1.Plot.Axes.Margins(horizontal: 0);
+        formsPlot1.Plot.Axes.AutoScale();
+        formsPlot1.Refresh();
     }
 }

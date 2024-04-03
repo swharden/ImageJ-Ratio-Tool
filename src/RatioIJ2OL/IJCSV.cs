@@ -10,11 +10,16 @@ public class IJCSV
     /// <summary>
     /// Number of frames assuming every frame has paired red and green channels
     /// </summary>
-    public int RatioFrameCount => FrameCount / 2;
+    public int RatioFrameCount => FrameCount / ChannelCount;
+
+    public const int ChannelCount = 2;
 
     public int RoiCount { get; }
 
     public double[,] Values { get; }
+
+    public int SweepCount { get; set; } = 1;
+    public int RoiFrameCountPerSweep => RatioFrameCount / SweepCount;
 
     /// <summary>
     /// Analyze an ImageJ ROI mult-measure CSV file.
@@ -50,5 +55,28 @@ public class IJCSV
         double r = Values[ratioFrame * 2, roi];
         double g = Values[ratioFrame * 2 + 1, roi];
         return g / r;
+    }
+
+    public double[] GetRatioAll(int roi)
+    {
+        double[] ratioValues = new double[RatioFrameCount];
+        for (int i = 0; i < ratioValues.Length; i++)
+        {
+            ratioValues[i] = GetRatioValue(i, roi);
+        }
+        return ratioValues;
+    }
+
+    public double[] GetRatioSweep(int roi, int sweep)
+    {
+        double[] values = new double[RoiFrameCountPerSweep];
+
+        for (int i = 0; i < values.Length; i++)
+        {
+            int frameIndex = i + sweep * RoiFrameCountPerSweep;
+            values[i] = GetRatioValue(frameIndex, roi);
+        }
+
+        return values;
     }
 }
