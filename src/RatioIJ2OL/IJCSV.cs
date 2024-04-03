@@ -20,9 +20,10 @@ public class IJCSV
 
     public int SweepCount { get; set; } = 1;
     public int RoiFrameCountPerSweep => RatioFrameCount / SweepCount;
+    public double FramePeriod { get; } = 0.067;
 
     /// <summary>
-    /// Analyze an ImageJ ROI mult-measure CSV file.
+    /// Analyze an ImageJ ROI multi-measure CSV file.
     /// </summary>
     public IJCSV(string path)
     {
