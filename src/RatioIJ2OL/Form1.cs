@@ -10,17 +10,17 @@ public partial class Form1 : Form
     {
         InitializeComponent();
 
-        string startupCsvFile = @"X:\Data\zProjects\Aging Spine\data\2024-04-02-adult\2p\cell3\TSeries-03282024-1506-2676\analysis\Results.csv";
-        if (File.Exists(startupCsvFile))
+        string? startupCsvFile = SampleData.GetSampleCsvFilePath();
+        if (startupCsvFile is not null)
             LoadCsv(startupCsvFile);
 
         nudFramesPerIteration.ValueChanged += (s, e) => PopulateRatioData();
         nudSelectedRoi.ValueChanged += (s, e) => PopulateRatioData();
         btnSelectCsv.Click += (s, e) =>
         {
-            OpenFileDialog diag = new() { Filter = "CSV files (*.csv)|*.csv" };
-            if (diag.ShowDialog() == DialogResult.OK)
-                LoadCsv(diag.FileName);
+            OpenFileDialog ofd = new() { Filter = "CSV files (*.csv)|*.csv" };
+            if (ofd.ShowDialog() == DialogResult.OK)
+                LoadCsv(ofd.FileName);
         };
     }
 
