@@ -1,3 +1,4 @@
+﻿using ScottPlot;
 using System.Data;
 using System.Windows.Forms;
 
@@ -15,8 +16,10 @@ public partial class Form1 : Form
         if (startupCsvFile is not null)
             LoadCsv(startupCsvFile);
 
-        nudSelectedRoi.ValueChanged += (s, e) => PopulateRatioData();
         nudSweeps.ValueChanged += (s, e) => PopulateRatioData();
+        nudSelectedRoi.ValueChanged += (s, e) => PopulateRatioData();
+        nudBaseline1.ValueChanged += (s, e) => PopulateRatioData();
+        nudBaseline2.ValueChanged += (s, e) => PopulateRatioData();
         btnSelectCsv.Click += (s, e) =>
         {
             OpenFileDialog ofd = new() { Filter = "CSV files (*.csv)|*.csv" };
@@ -39,6 +42,11 @@ public partial class Form1 : Form
         if (IJCSV is null) return;
 
         IJCSV.SweepCount = (int)nudSweeps.Value;
+        IJCSV.BaselineTime1 = (double)nudBaseline1.Value;
+        IJCSV.BaselineTime2 = (double)nudBaseline2.Value;
+
+        if (nudBaseline1.Value > nudBaseline2.Value)
+            nudBaseline2.Value = nudBaseline1.Value;
     }
 
     private void PopulateRatioData()
@@ -88,15 +96,21 @@ public partial class Form1 : Form
 
         for (int i = 0; i < IJCSV.SweepCount; i++)
         {
-            double[] values = IJCSV.GetRatioSweep(roiIndex, i);
-            var sig = formsPlot1.Plot.Add.Signal(values);
+            double[] values = IJCSV.GetDffSweep(roiIndex, i);
+            var sig = formsPlot1.Plot.Add.Signal(values, IJCSV.FramePeriod);
             sig.LineWidth = 2;
-            sig.Label = $"ROI {roiIndex + 1}";
+            sig.Label = $"Sweep {roiIndex + 1}";
         }
 
-        formsPlot1.Plot.ShowLegend(ScottPlot.Alignment.UpperRight);
+        var gs = formsPlot1.Plot.Add.HorizontalSpan(IJCSV.BaselineTime1, IJCSV.BaselineTime2, Colors.Black.WithAlpha(.1));
+        gs.LineStyle.Color = Colors.Transparent;
+
+        formsPlot1.Plot.ShowLegend(Alignment.UpperRight);
         formsPlot1.Plot.Axes.Margins(horizontal: 0);
         formsPlot1.Plot.Axes.AutoScale();
+        formsPlot1.Plot.XLabel("Time (seconds)");
+        formsPlot1.Plot.YLabel("ΔF/F (%)");
+        formsPlot1.Plot.Title($"{IJCSV.Filename} ROI #{roiIndex + 1}");
         formsPlot1.Refresh();
     }
 }

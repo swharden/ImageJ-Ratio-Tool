@@ -35,9 +35,14 @@ partial class Form1
         formsPlot1 = new ScottPlot.WinForms.FormsPlot();
         nudSweeps = new NumericUpDown();
         label3 = new Label();
+        nudBaseline1 = new NumericUpDown();
+        label1 = new Label();
+        nudBaseline2 = new NumericUpDown();
         ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
         ((System.ComponentModel.ISupportInitialize)nudSelectedRoi).BeginInit();
         ((System.ComponentModel.ISupportInitialize)nudSweeps).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)nudBaseline1).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)nudBaseline2).BeginInit();
         SuspendLayout();
         // 
         // btnSelectCsv
@@ -109,11 +114,46 @@ partial class Form1
         label3.TabIndex = 9;
         label3.Text = "Sweeps:";
         // 
+        // nudBaseline1
+        // 
+        nudBaseline1.DecimalPlaces = 2;
+        nudBaseline1.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+        nudBaseline1.Location = new Point(471, 12);
+        nudBaseline1.Margin = new Padding(2);
+        nudBaseline1.Name = "nudBaseline1";
+        nudBaseline1.Size = new Size(54, 23);
+        nudBaseline1.TabIndex = 11;
+        nudBaseline1.Value = new decimal(new int[] { 25, 0, 0, 131072 });
+        // 
+        // label1
+        // 
+        label1.AutoSize = true;
+        label1.Location = new Point(414, 14);
+        label1.Margin = new Padding(2, 0, 2, 0);
+        label1.Name = "label1";
+        label1.Size = new Size(53, 15);
+        label1.TabIndex = 10;
+        label1.Text = "Baseline:";
+        // 
+        // nudBaseline2
+        // 
+        nudBaseline2.DecimalPlaces = 2;
+        nudBaseline2.Increment = new decimal(new int[] { 1, 0, 0, 65536 });
+        nudBaseline2.Location = new Point(529, 12);
+        nudBaseline2.Margin = new Padding(2);
+        nudBaseline2.Name = "nudBaseline2";
+        nudBaseline2.Size = new Size(54, 23);
+        nudBaseline2.TabIndex = 12;
+        nudBaseline2.Value = new decimal(new int[] { 75, 0, 0, 131072 });
+        // 
         // Form1
         // 
         AutoScaleDimensions = new SizeF(7F, 15F);
         AutoScaleMode = AutoScaleMode.Font;
         ClientSize = new Size(1508, 548);
+        Controls.Add(nudBaseline2);
+        Controls.Add(nudBaseline1);
+        Controls.Add(label1);
         Controls.Add(label3);
         Controls.Add(nudSweeps);
         Controls.Add(formsPlot1);
@@ -124,10 +164,12 @@ partial class Form1
         Margin = new Padding(2);
         Name = "Form1";
         StartPosition = FormStartPosition.CenterScreen;
-        Text = " ";
+        Text = "ImageJ Ratiometric ROI Analysis Tool";
         ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
         ((System.ComponentModel.ISupportInitialize)nudSelectedRoi).EndInit();
         ((System.ComponentModel.ISupportInitialize)nudSweeps).EndInit();
+        ((System.ComponentModel.ISupportInitialize)nudBaseline1).EndInit();
+        ((System.ComponentModel.ISupportInitialize)nudBaseline2).EndInit();
         ResumeLayout(false);
         PerformLayout();
     }
@@ -141,4 +183,7 @@ partial class Form1
     private ScottPlot.WinForms.FormsPlot formsPlot1;
     private NumericUpDown nudSweeps;
     private Label label3;
+    private NumericUpDown nudBaseline1;
+    private Label label1;
+    private NumericUpDown nudBaseline2;
 }

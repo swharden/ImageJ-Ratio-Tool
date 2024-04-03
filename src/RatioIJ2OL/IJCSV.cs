@@ -21,12 +21,19 @@ public class IJCSV
     public int SweepCount { get; set; } = 1;
     public int RoiFrameCountPerSweep => RatioFrameCount / SweepCount;
     public double FramePeriod { get; } = 0.067;
+    public double BaselineTime1 { get; set; } = 0;
+    public double BaselineTime2 { get; set; } = 1;
+    public int BaselineIndex1 => (int)(BaselineTime1 / FramePeriod);
+    public int BaselineIndex2 => (int)(BaselineTime2 / FramePeriod);
+    public string FilePath { get; }
+    public string Filename => Path.GetFileName(FilePath);
 
     /// <summary>
     /// Analyze an ImageJ ROI multi-measure CSV file.
     /// </summary>
     public IJCSV(string path)
     {
+        FilePath = path;
         string[] lines = File.ReadAllLines(path);
 
         // skip header
@@ -78,6 +85,22 @@ public class IJCSV
             values[i] = GetRatioValue(frameIndex, roi);
         }
 
+        return values;
+    }
+
+    public double[] GetDffSweep(int roi, int sweep)
+    {
+        double[] values = GetRatioSweep(roi, sweep);
+
+        double baseline = (BaselineIndex1 >= BaselineIndex2)
+                ? values[BaselineIndex2]
+                : values[BaselineIndex1..BaselineIndex2].Average();
+
+        for (int i = 0; i < values.Length; i++)
+        {
+            double delta = values[i] - baseline;
+            values[i] = delta / baseline * 100.0;
+        }
         return values;
     }
 }
