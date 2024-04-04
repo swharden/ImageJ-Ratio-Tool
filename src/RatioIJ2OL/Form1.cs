@@ -75,10 +75,10 @@ public partial class Form1 : Form
         int framesPerIteration = IJCSV.RoiFrameCountPerSweep;
 
         DataTable dataTable = new();
-        dataGridView2.RowHeadersVisible = false;
-        dataGridView2.DataSource = dataTable;
-        dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-        dataGridView2.AllowUserToAddRows = false;
+        dataGridView1.RowHeadersVisible = false;
+        dataGridView1.DataSource = dataTable;
+        dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+        dataGridView1.AllowUserToAddRows = false;
 
         dataTable.Columns.Add("Time", typeof(float));
         for (int i = 0; i < IJCSV.SweepCount; i++)
@@ -90,12 +90,16 @@ public partial class Form1 : Form
         {
             DataRow dataRow = dataTable.NewRow();
             dataRow.SetField(0, i * IJCSV.FramePeriod);
-            for (int sweep = 0; sweep < IJCSV.SweepCount; sweep++)
-            {
-                int ratioFrame = framesPerIteration * sweep + i;
-                dataRow.SetField(1 + sweep, IJCSV.GetRatioValue(ratioFrame, roiIndex));
-            }
             dataTable.Rows.Add(dataRow);
+        }
+
+        for (int x = 0; x < IJCSV.SweepCount; x++)
+        {
+            double[] values = IJCSV.GetDffSweep(roiIndex, x);
+            for (int y = 0; y < values.Length; y++)
+            {
+                dataGridView1[x + 1, y].Value = values[y];
+            }
         }
 
         PlotRatioData();

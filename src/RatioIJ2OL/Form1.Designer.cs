@@ -29,7 +29,7 @@ partial class Form1
     private void InitializeComponent()
     {
         btnSelectCsv = new Button();
-        dataGridView2 = new DataGridView();
+        dataGridView1 = new DataGridView();
         label2 = new Label();
         nudSelectedRoi = new NumericUpDown();
         formsPlot1 = new ScottPlot.WinForms.FormsPlot();
@@ -39,7 +39,7 @@ partial class Form1
         label1 = new Label();
         nudBaseline2 = new NumericUpDown();
         splitContainer1 = new SplitContainer();
-        ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
+        ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
         ((System.ComponentModel.ISupportInitialize)nudSelectedRoi).BeginInit();
         ((System.ComponentModel.ISupportInitialize)nudSweeps).BeginInit();
         ((System.ComponentModel.ISupportInitialize)nudBaseline1).BeginInit();
@@ -62,14 +62,14 @@ partial class Form1
         // 
         // dataGridView2
         // 
-        dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-        dataGridView2.Dock = DockStyle.Fill;
-        dataGridView2.Location = new Point(0, 0);
-        dataGridView2.Margin = new Padding(2);
-        dataGridView2.Name = "dataGridView2";
-        dataGridView2.RowHeadersWidth = 62;
-        dataGridView2.Size = new Size(500, 486);
-        dataGridView2.TabIndex = 2;
+        dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+        dataGridView1.Dock = DockStyle.Fill;
+        dataGridView1.Location = new Point(0, 0);
+        dataGridView1.Margin = new Padding(2);
+        dataGridView1.Name = "dataGridView2";
+        dataGridView1.RowHeadersWidth = 62;
+        dataGridView1.Size = new Size(500, 486);
+        dataGridView1.TabIndex = 2;
         // 
         // label2
         // 
@@ -159,7 +159,7 @@ partial class Form1
         // 
         // splitContainer1.Panel1
         // 
-        splitContainer1.Panel1.Controls.Add(dataGridView2);
+        splitContainer1.Panel1.Controls.Add(dataGridView1);
         // 
         // splitContainer1.Panel2
         // 
@@ -186,7 +186,7 @@ partial class Form1
         Name = "Form1";
         StartPosition = FormStartPosition.CenterScreen;
         Text = "ImageJ Ratiometric ROI Analysis Tool";
-        ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
+        ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
         ((System.ComponentModel.ISupportInitialize)nudSelectedRoi).EndInit();
         ((System.ComponentModel.ISupportInitialize)nudSweeps).EndInit();
         ((System.ComponentModel.ISupportInitialize)nudBaseline1).EndInit();
@@ -202,7 +202,7 @@ partial class Form1
     #endregion
 
     private Button btnSelectCsv;
-    private DataGridView dataGridView2;
+    private DataGridView dataGridView1;
     private Label label2;
     private NumericUpDown nudSelectedRoi;
     private ScottPlot.WinForms.FormsPlot formsPlot1;
