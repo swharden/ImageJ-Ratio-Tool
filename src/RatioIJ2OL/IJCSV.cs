@@ -1,4 +1,6 @@
-﻿namespace RatioIJ2OL;
+﻿using System.Data;
+
+namespace RatioIJ2OL;
 
 public class IJCSV
 {
@@ -102,5 +104,47 @@ public class IJCSV
             values[i] = delta / baseline * 100.0;
         }
         return values;
+    }
+
+    public double[,] GetDffChart(int roi)
+    {
+        double[,] values = new double[RoiFrameCountPerSweep, SweepCount];
+
+        for (int sweep = 0; sweep < SweepCount; sweep++)
+        {
+            double[] dffSweep = GetDffSweep(roi, sweep);
+            for (int frame = 0; frame < RoiFrameCountPerSweep; frame++)
+            {
+                values[frame, sweep] = dffSweep[frame];
+            }
+        }
+
+        return values;
+    }
+
+    public DataTable GetDffDataTable(int roi)
+    {
+        double[,] values = GetDffChart(roi);
+        DataTable dataTable = new();
+
+        dataTable.Columns.Add("Time", typeof(float));
+        for (int x = 0; x < values.GetLength(1); x++)
+        {
+            dataTable.Columns.Add($"Sweep {x + 1}", typeof(float));
+        }
+
+        for (int frame = 0; frame < values.GetLength(0); frame++)
+        {
+            DataRow dataRow = dataTable.NewRow();
+            dataRow.SetField(0, frame * FramePeriod);
+
+            for (int sweep = 0; sweep < values.GetLength(1); sweep++)
+            {
+                dataRow.SetField(sweep + 1, values[frame, sweep]);
+            }
+            dataTable.Rows.Add(dataRow);
+        }
+
+        return dataTable;
     }
 }

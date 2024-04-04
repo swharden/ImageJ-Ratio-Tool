@@ -11,7 +11,12 @@ public partial class Form1 : Form
     public Form1()
     {
         InitializeComponent();
+
         AllowDrop = true;
+
+        dataGridView1.RowHeadersVisible = false;
+        dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+        dataGridView1.AllowUserToAddRows = false;
 
         string? startupCsvFile = SampleData.GetSampleCsvFilePath();
         if (startupCsvFile is not null)
@@ -72,35 +77,8 @@ public partial class Form1 : Form
         UpdateAnalyzerToReflectGuiOptions();
 
         int roiIndex = (int)nudSelectedRoi.Value - 1;
-        int framesPerIteration = IJCSV.RoiFrameCountPerSweep;
 
-        DataTable dataTable = new();
-        dataGridView1.RowHeadersVisible = false;
-        dataGridView1.DataSource = dataTable;
-        dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-        dataGridView1.AllowUserToAddRows = false;
-
-        dataTable.Columns.Add("Time", typeof(float));
-        for (int i = 0; i < IJCSV.SweepCount; i++)
-        {
-            dataTable.Columns.Add($"Sweep {i + 1}", typeof(float));
-        }
-
-        for (int i = 0; i < framesPerIteration; i++)
-        {
-            DataRow dataRow = dataTable.NewRow();
-            dataRow.SetField(0, i * IJCSV.FramePeriod);
-            dataTable.Rows.Add(dataRow);
-        }
-
-        for (int x = 0; x < IJCSV.SweepCount; x++)
-        {
-            double[] values = IJCSV.GetDffSweep(roiIndex, x);
-            for (int y = 0; y < values.Length; y++)
-            {
-                dataGridView1[x + 1, y].Value = values[y];
-            }
-        }
+        dataGridView1.DataSource = IJCSV.GetDffDataTable(roiIndex);
 
         PlotRatioData();
         Application.DoEvents();
