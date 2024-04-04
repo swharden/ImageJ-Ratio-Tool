@@ -11,6 +11,7 @@ public partial class Form1 : Form
     public Form1()
     {
         InitializeComponent();
+        AllowDrop = true;
 
         string? startupCsvFile = SampleData.GetSampleCsvFilePath();
         if (startupCsvFile is not null)
@@ -25,6 +26,21 @@ public partial class Form1 : Form
             OpenFileDialog ofd = new() { Filter = "CSV files (*.csv)|*.csv" };
             if (ofd.ShowDialog() == DialogResult.OK)
                 LoadCsv(ofd.FileName);
+        };
+
+        DragEnter += (o, e) =>
+        {
+            if (e.Data is null) return;
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Copy;
+        };
+
+        DragDrop += (o, e) =>
+        {
+            if (e.Data is null) return;
+            if (e.Data.GetData(DataFormats.FileDrop) is not string[] paths) return;
+            foreach (string path in paths)
+                LoadCsv(path);
         };
     }
 
