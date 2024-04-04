@@ -125,6 +125,8 @@ public partial class Form1 : Form
         var gs = formsPlot1.Plot.Add.HorizontalSpan(IJCSV.BaselineTime1, IJCSV.BaselineTime2, Colors.Black.WithAlpha(.1));
         gs.LineStyle.Color = Colors.Transparent;
 
+        formsPlot1.Plot.Add.HorizontalLine(0, 1, Colors.Black, LinePattern.Dashed);
+
         formsPlot1.Plot.ShowLegend(Alignment.UpperRight);
         formsPlot1.Plot.Axes.Margins(horizontal: 0);
         formsPlot1.Plot.Axes.AutoScale();
